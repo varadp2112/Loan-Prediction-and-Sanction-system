@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Global Trust Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --saffron: #FF9933;
+            --white: #FFFFFF;
+            --green: #138808;
+            --navy-blue: #000080;
+            --light-blue: #E2E8F0;
+            --dark-gray: #1E293B;
+        }
+        
+        body {
+            background-color: #F8FAFC;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            color: white; /* Set default text color to white */
+        }
+        
+        .sidebar {
+            background: linear-gradient(to bottom, var(--navy-blue), #00005A);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: white; /* Ensure white text */
+        }
+        
+        .sidebar-header small {
+            color: rgba(255, 255, 255, 0.7) !important; /* Light gray for subtitle */
+        }
+        
+        .bank-logo {
+            width: 40px;
+            height: 40px;
+            background-color: var(--white);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .bank-logo .ashoka-chakra {
+            color: var(--navy-blue);
+            font-size: 24px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 3px solid var(--saffron);
+        }
+        
+        .sidebar-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+            color: #333; /* Dark text for main content only */
+        }
+        
+        .navbar {
+            background-color: var(--navy-blue);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            border-bottom: 1px solid #E2E8F0;
+            color: white;
+        }
+        
+        /* Rest of your CSS remains the same */
+        .dashboard-card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--navy-blue);
+            background-color: white;
+            color: #333;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-icon {
+            font-size: 1.8rem;
+            color: var(--navy-blue);
+            margin-bottom: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--navy-blue);
+            color: #333; /* Dark text for stats */
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+        }
+        
+        .stat-label {
+            color: #64748B;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .recent-transactions {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #E2E8F0;
+            color: #333; /* Dark text for tables */
+        }
+        
+        .transaction-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .badge-deposit {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+        }
+        
+        .badge-withdrawal {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #DC3545;
+        }
+        
+        .badge-transfer {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0D6EFD;
+        }
+        
+        .alert-banking {
+            border-left: 4px solid var(--saffron);
+            background-color: rgba(255, 153, 51, 0.1);
+            color: #333; /* Dark text for alerts */
+        }
+        
+        .rupee-icon {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+        }
+        
+        .quick-action-btn {
+            border-radius: 6px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .indian-flag-colors {
+            background: linear-gradient(to bottom, var(--saffron), var(--white), var(--green));
+            height: 4px;
+            border-radius: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -250px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.active {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="bank-logo">
+                <div class="ashoka-chakra">✸</div>
+            </div>
+            <h5 class="mb-0">Global Trust Bank</h5>
+            <small class="text-muted">Admin Dashboard</small>
+            <div class="indian-flag-colors mt-2"></div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.endpoint == 'admin_dashboard' else '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="{{ url_for('manage_users') }}"><i class="fas fa-users"></i> Customer Management</a>
+            <a href="{{ url_for('manage_loans') }}"><i class="fas fa-rupee-sign"></i> Loan Applications</a>
+            <a href="{{ url_for('manage_verified_users') }}"><i class="fas fa-user-check"></i> KYC Verified</a>
+            <a href="#"><i class="fas fa-file-invoice"></i> UPI Transactions</a>
+            <a href="#"><i class="fas fa-chart-pie"></i> NPA Reports</a>
+            <a href="#"><i class="fas fa-piggy-bank"></i> RD/Accounts</a>
+            <a href="{{ url_for('system_settings') }}" class="{{ 'active' if request.endpoint == 'system_settings' else '' }}"><i class="fas fa-cog"></i> System Settings</a>
+            <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-lg mb-4">
+            <div class="container-fluid">
+                <button class="btn btn-sm d-lg-none" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="d-flex align-items-center ms-auto">
+                    <i class="fas fa-bell me-3"></i>
+                    <a href="{{ url_for('logout') }}" class="btn btn-sm btn-light">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Content -->
+        <div class="container-fluid">
+            <!-- Alerts -->
+            <div class="alert alert-banking alert-dismissible fade show mb-4">
+                <strong><i class="fas fa-exclamation-triangle me-2"></i>Important:</strong> 5 high-value transactions (>₹10,00,000) require approval as per RBI guidelines.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">5,842</div>
+                        <div class="stat-label">Total Customers</div>
+                        <div class="text-success small mt-2"><i class="fas fa-arrow-up me-1"></i> 18% from last quarter</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value"><span class="rupee-icon">₹</span>12.7Cr</div>
+                        <div class="stat-label">Daily Deposits</div>
+                        <div class="text-success small mt-2"><i class="fas fa-arrow-up me-1"></i> 7% from yesterday</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">127</div>
+                        <div class="stat-label">Pending Loans</div>
+                        <div class="text-danger small mt-2"><i class="fas fa-arrow-up me-1"></i> 12 new today</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value">94%</div>
+                        <div class="stat-label">KYC Compliance</div>
+                        <div class="text-warning small mt-2"><i class="fas fa-exclamation-circle me-1"></i> 6% pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h5 class="mb-3"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="#" class="btn btn-outline-primary quick-action-btn">
+                            <i class="fas fa-user-plus"></i> New Account
+                        </a>
+                        <a href="#" class="btn btn-outline-primary quick-action-btn">
+                            <i class="fas fa-rupee-sign"></i> Loan Approval
+                        </a>
+                        <a href="#" class="btn btn-outline-primary quick-action-btn">
+                            <i class="fas fa-qrcode"></i> UPI Management
+                        </a>
+                        <a href="#" class="btn btn-outline-primary quick-action-btn">
+                            <i class="fas fa-file-alt"></i> Generate MIS
+                        </a>
+                        <a href="#" class="btn btn-outline-primary quick-action-btn">
+                            <i class="fas fa-envelope"></i> SMS Alert
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="recent-transactions p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5><i class="fas fa-exchange-alt me-2"></i>Recent Transactions (UPI/IMPS/NEFT)</h5>
+                            <a href="#" class="btn btn-sm btn-link">View All</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>UTR No.</th>
+                                        <th>Customer</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>UTR7856342AXB12</td>
+                                        <td>Priya Kumar</td>
+                                        <td><span class="transaction-badge badge-deposit">Deposit</span></td>
+                                        <td><span class="rupee-icon">₹</span>1,25,000.00</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>10:23 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>UTR7856341AXB11</td>
+                                        <td>Rajesh Sharma</td>
+                                        <td><span class="transaction-badge badge-withdrawal">Withdrawal</span></td>
+                                        <td><span class="rupee-icon">₹</span>50,000.00</td>
+                                        <td><span class="badge bg-warning">Pending</span></td>
+                                        <td>09:45 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>UTR7856340AXB10</td>
+                                        <td>Amit Mishra</td>
+                                        <td><span class="transaction-badge badge-transfer">IMPS</span></td>
+                                        <td><span class="rupee-icon">₹</span>87,500.00</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>09:12 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>UTR7856339AXB09</td>
+                                        <td>Sunita Devi</td>
+                                        <td><span class="transaction-badge badge-deposit">FD Maturity</span></td>
+                                        <td><span class="rupee-icon">₹</span>3,20,000.00</td>
+                                        <td><span class="badge bg-danger">Hold</span></td>
+                                        <td>Yesterday</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="col-md-4">
+                    <div class="recent-transactions p-4 h-100">
+                        <h5 class="mb-3"><i class="fas fa-list-alt me-2"></i>Bank Activities</h5>
+                        <div class="activity-list">
+                            <div class="activity-item mb-3 pb-3 border-bottom">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-user-plus text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <small class="text-muted float-end">15 min ago</small>
+                                        <h6 class="mb-1">New Jan Dhan account</h6>
+                                        <p class="mb-0 small">Ramesh Patel opened new PMJDY account</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="activity-item mb-3 pb-3 border-bottom">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-rupee-sign text-warning"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <small class="text-muted float-end">45 min ago</small>
+                                        <h6 class="mb-1">Home loan application</h6>
+                                        <p class="mb-0 small">₹25,00,000 home loan request received</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="activity-item mb-3 pb-3 border-bottom">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-mobile-alt text-info"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <small class="text-muted float-end">2 hours ago</small>
+                                        <h6 class="mb-1">UPI transaction flagged</h6>
+                                        <p class="mb-0 small">₹1,50,000 UPI payment to new payee</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="activity-item mb-3">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-user-shield text-success"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <small class="text-muted float-end">3 hours ago</small>
+                                        <h6 class="mb-1">KYC verification</h6>
+                                        <p class="mb-0 small">Aadhaar verification completed for 12 customers</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
